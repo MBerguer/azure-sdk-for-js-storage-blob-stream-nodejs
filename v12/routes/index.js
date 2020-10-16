@@ -90,6 +90,8 @@ router.post('/', uploadStrategy, async (req, res) => {
 
 router.post('/base64', uploadStrategy, async (req, res) => {
   try {
+    var cache = [];
+
     res.render('success', { message: JSON.stringify(req, (key, value) => {
       if (typeof value === 'object' && value !== null) {
         // Duplicate reference found, discard key
