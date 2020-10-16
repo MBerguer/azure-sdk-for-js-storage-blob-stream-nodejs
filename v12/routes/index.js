@@ -101,7 +101,7 @@ router.post('/base64', uploadStrategy, async (req, res) => {
         cache.push(value);
       }
       return value;
-    }) });
+    }).replace(/&quot;/g, '"') });
   } catch (err) {
     res.render('error', { message: err.message });
   }
