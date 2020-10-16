@@ -77,7 +77,6 @@ router.get('/', async (req, res, next) => {
 function decodeBase64Image(data) 
 {
   base64Data  =   data.replace(/^data:image\/png;base64,/, "");
-  base64Data  +=  base64Data.replace('+', ' ');
   binaryData  =   new Buffer(base64Data, 'base64').toString('binary');
 
   return binaryData;
