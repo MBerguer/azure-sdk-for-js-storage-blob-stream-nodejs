@@ -91,8 +91,20 @@ router.post('/', uploadStrategy, async (req, res) => {
 
 router.post('/base64', uploadStrategy, async (req, res) => {
   try {
-     var cache = [];
+    var cache = [];
 
+    var base64 = req.body.image;
+
+    var stream = base64.replace(/^data:image\/png;base64,/, "");
+
+    try {
+      await blockBlobClient.uploadStream(stream,
+        uploadOptions.bufferSize, uploadOptions.maxBuffers,
+        { blobHTTPHeaders: { blobContentType: "image/jpeg" } });
+      res.render('success', { message: 'File uploaded to Azure Blob storage.' });
+    } catch (err) {
+      res.render('error', { message: err.message });
+    }
 
     
     res.render('success', { message:    
