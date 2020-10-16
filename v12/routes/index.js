@@ -73,6 +73,23 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+
+function decodeBase64Image(dataString) 
+{
+  var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+  var response = {};
+
+  if (matches.length !== 3) 
+  {
+    return new Error('Invalid input string');
+  }
+
+  response.type = matches[1];
+  response.data = new Buffer(matches[2], 'base64');
+
+  return response;
+}
+
 router.post('/', uploadStrategy, async (req, res) => {
   const blobName = getBlobName(req.file.originalname);
   const stream = getStream(req.file.buffer);
@@ -95,7 +112,10 @@ router.post('/base64', uploadStrategy, async (req, res) => {
 
     var base64 = req.body.image;
 
-    var stream = base64.replace(/^data:image\/png;base64,/, "");
+    const blobName = getBlobName("test");
+    const stream = getStream(decodeBase64Image(base64));
+    const containerClient = blobServiceClient.getContainerClient(containerName2);;
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
     try {
       await blockBlobClient.uploadStream(stream,
