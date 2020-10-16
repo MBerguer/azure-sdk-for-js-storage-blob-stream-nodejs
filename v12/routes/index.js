@@ -19,6 +19,7 @@ const containerName2 = 'images';
 const ONE_MEGABYTE = 1024 * 1024;
 const uploadOptions = { bufferSize: 4 * ONE_MEGABYTE, maxBuffers: 20 };
 const ONE_MINUTE = 60 * 1000;
+const util = require('util'),
 
 const sharedKeyCredential = new StorageSharedKeyCredential(
   process.env.AZURE_STORAGE_ACCOUNT_NAME,
@@ -90,18 +91,20 @@ router.post('/', uploadStrategy, async (req, res) => {
 
 router.post('/base64', uploadStrategy, async (req, res) => {
   try {
-    var cache = [];
-
-    res.render('success', { message: JSON.stringify(req, (key, value) => {
-      if (typeof value === 'object' && value !== null) {
-        // Duplicate reference found, discard key
-        if (cache.includes(value)) return;
+    // var cache = [];
+    // JSON.stringify(req, (key, value) => {
+    //   if (typeof value === 'object' && value !== null) {
+    //     // Duplicate reference found, discard key
+    //     if (cache.includes(value)) return;
     
-        // Store value in our collection
-        cache.push(value);
-      }
-      return value;
-    }).replace(/&quot;/g, '"') });
+    //     // Store value in our collection
+    //     cache.push(value);
+    //   }
+    //   return value;
+    // }).replace(/&quot;/g, '"')
+
+    
+    res.render('success', { message: util.inspect(req, {depth: null})  });
   } catch (err) {
     res.render('error', { message: err.message });
   }
