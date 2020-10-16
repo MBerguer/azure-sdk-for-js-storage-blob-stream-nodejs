@@ -88,4 +88,13 @@ router.post('/', uploadStrategy, async (req, res) => {
   }
 });
 
+router.post('/base64', uploadStrategy, async (req, res) => {
+  try {
+    res.render('success', { message: JSON.stringify(req) });
+  } catch (err) {
+    res.render('error', { message: err.message });
+  }
+});
+
+
 module.exports = router;
