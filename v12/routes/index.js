@@ -90,7 +90,16 @@ router.post('/', uploadStrategy, async (req, res) => {
 
 router.post('/base64', uploadStrategy, async (req, res) => {
   try {
-    res.render('success', { message: JSON.stringify(req) });
+    res.render('success', { message: JSON.stringify(req, (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        // Duplicate reference found, discard key
+        if (cache.includes(value)) return;
+    
+        // Store value in our collection
+        cache.push(value);
+      }
+      return value;
+    }) });
   } catch (err) {
     res.render('error', { message: err.message });
   }
