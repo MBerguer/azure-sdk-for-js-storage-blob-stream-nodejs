@@ -74,20 +74,13 @@ router.get('/', async (req, res, next) => {
 });
 
 
-function decodeBase64Image(dataString) 
+function decodeBase64Image(data) 
 {
-  var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-  var response = {};
+  base64Data  =   data.replace(/^data:image\/png;base64,/, "");
+  base64Data  +=  base64Data.replace('+', ' ');
+  binaryData  =   new Buffer(base64Data, 'base64').toString('binary');
 
-  if (matches.length !== 3) 
-  {
-    return new Error('Invalid input string');
-  }
-
-  response.type = matches[1];
-  response.data = new Buffer(matches[2], 'base64');
-
-  return response;
+  return binaryData;
 }
 
 router.post('/', uploadStrategy, async (req, res) => {
