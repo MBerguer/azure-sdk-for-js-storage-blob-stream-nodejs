@@ -28,6 +28,10 @@ const pipeline = newPipeline(sharedKeyCredential);
 
 const blobServiceClient = new BlobServiceClient(
   `https://${process.env.AZURE_STORAGE_ACCOUNT_NAME}.blob.core.windows.net`,
+  use_byte_buffer=1640964096, //16mb
+  max_chunk_get_size=1640964096, //16mb
+  max_page_size=1640964096, //16mb
+  max_block_size=1640964096, //16mb
   pipeline
 );
 
